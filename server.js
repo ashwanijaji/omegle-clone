@@ -2,6 +2,8 @@ const express = require('express');
 const socketIO = require('socket.io');
 const http = require('http');
 const path = require('path');
+const socket = io('https://yourdomain.com');
+
 
 const app = express();
 const server = http.createServer(app);
