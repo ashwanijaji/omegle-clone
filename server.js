@@ -1,18 +1,21 @@
-// server.js
 const express = require('express');
-const http = require('http');
 const socketIO = require('socket.io');
+const http = require('http');
+const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
-app.use(express.static('public'));
-
 const users = {};
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
+
+  // Send the number of connected users to the new user
+  socket.emit('userCount', Object.keys(users).length + 1);
 
   // Find a random user to pair with
   const userIds = Object.keys(users);
@@ -41,6 +44,7 @@ io.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server listening on port ${PORT}`);
 });
+
 
